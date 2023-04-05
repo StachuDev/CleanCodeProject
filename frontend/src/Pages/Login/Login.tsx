@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import  '../../Assets/Styles/register.css';
 
-
-
-
 type FormValues = {
   login: string;
   email: string;
