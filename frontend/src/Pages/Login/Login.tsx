@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import  '../../Assets/Styles/register.css';
 
 type FormValues = {
@@ -14,6 +14,7 @@ type FormValues = {
 
 
 const LoginForm = () => {
+
   const [formValues] = useState<FormValues>({
     login: '',
     email: '',

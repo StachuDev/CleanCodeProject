@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
  
 const URL = 'https://jsonplaceholder.typicode.com/posts';
  
-function App() {
+function App2() {
 	const [posts, setPosts] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
  
@@ -16,6 +17,21 @@ function App() {
 			})
 			.catch((err) => console.log(err));
 	}, []);
+    // axios.post('/login', {
+    //     firstName: 'Fred',
+    //     lastName: 'Flintstone'
+    //   })
+    //   .then(function (response) {
+    //     console.log(response);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
+
+    // useEffect(() => {
+	// 	setIsLoading(true);
+		
+	// }, []);
  
 	// UseEffect(funkcja, tablica zaleznosci)
  
@@ -29,8 +45,9 @@ function App() {
 			.catch((err) => console.log(err));
 	};
  
-	console.log(posts);
+	// console.log(posts);
 	return (
+        
 		<div className='App' style={{ fontFamily: 'Verdana' }}>
 			Wyświetlanie jakiś postów
 			<div>
@@ -54,4 +71,4 @@ function App() {
 	);
 }
  
-export default App;
+export default App2;
