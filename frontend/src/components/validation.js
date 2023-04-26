@@ -23,7 +23,7 @@ const Validation = (formData) => {
     }
 
     if (formData.password !== formData.rep_password){
-        errors.rep_password = "Jeden pindol był cieniutki, a drugi gruby jak świnia. Może ukąszenie świni boli, lecz to rany po leszczynie goją się dłużej."
+        errors.rep_password = "hasło jest wymagane"
     }
 
     return errors;

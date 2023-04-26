@@ -3,13 +3,25 @@ import { Link } from 'react-router-dom';
 import Header from './Header';
 import '../style/register.css'
 
-var acc="";
+function AddAccesTokenToStorage({ element }) {
+  // Set the access token in local storage
+  // localStorage.setItem('access_token', element);
+  return (
+    <>
+      <div style={{ color: 'red', height: '40px'}}>{element}</div>
+    </>
+  );
+}
+
+
+// var acc="";
 function Login() {
   const [accessToken, setAccessToken] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  
+
+
   async function handleLogin(e) {
     e.preventDefault();
     //setError(Validation(values));
@@ -26,42 +38,40 @@ function Login() {
         throw new Error(data.message || 'DING DONG SOMETHING IS WRONG!!!!!!!!!!!!!!!!!!!!!!');
       }
       setAccessToken(data.accessToken);
-      acc+="Zalogowano. Twój access token to: ";
-      acc+=data.access;
-      // console.log(acc);
+      // addAccesTokenToStorage();
     } catch (error) {
       alert(error.message);
     }
-    
+
   }
-  console.log(acc);
+  // console.log(acc);
   return (
     <div className='container'>
-      <Header/>
+      {/* <Header /> */}
+      <AddAccesTokenToStorage element={accessToken} />
       <div className='register'>
         <form onSubmit={handleLogin}>
-          <label htmlFor= "email" id='login' className='registerForm'>
-            <input type="text" name="login" className='registerForm' placeholder='email' onChange={(e) => setEmail(e.target.value)}/>
+          <label htmlFor="email" id='login' className='registerForm'>
+            <input type="text" name="login" className='registerForm' placeholder='email' onChange={(e) => setEmail(e.target.value)} />
           </label><br></br>
 
           <label htmlFor="password" id='password' className='registerForm'>
-            <input type="password" name="password" className='registerForm' placeholder='password' onChange={(e) => setPassword(e.target.value)}/>
+            <input type="password" name="password" className='registerForm' placeholder='password' onChange={(e) => setPassword(e.target.value)} />
           </label>
           <br></br>
 
           <div className="recoverPassword">
             <Link to="/password">Forgot your password?</Link>
-            </div>
+          </div>
 
           <button type="submit" className='registerForm'>Sign in</button>
 
           <Link to="/Register" className="signIn">Create an account</Link>
         </form>
-        
+
       </div>
-      <div><p>{acc}</p></div>
     </div>
-    
+
   );
 };
 
