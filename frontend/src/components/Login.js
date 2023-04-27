@@ -14,10 +14,8 @@ async function userLogin(credentials) {
     });  
 }
 
-
-// var acc="";
-function Login() {
-  const [accessToken, setAccessToken] = useState('');
+export default function Login({setToken}) {
+  // const [accessToken, setAccessToken] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -30,21 +28,18 @@ function Login() {
     });
     if(response.ok){
       const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'DING DONG SOMETHING IS WRONG!!!!!!!!!!!!!!!!!!!!!!');
-      }
-      setAccessToken(data.accessToken);
-      // addAccesTokenToStorage();
-    } catch (error) {
-      alert(error.message);
-    }
-
+      const token = data.access;
+      setToken(token);
+    }else{
+      console.log("Server Connecting Error");
+    }    
   }
+
+
   // console.log(acc);
   return (
     <div className='container'>
-      {/* <Header /> */}
-      <AddAccesTokenToStorage element={accessToken} />
+      <Header/>
       <div className='register'>
         <form onSubmit={handleSubmit}>
           <label htmlFor= "email" id='login' className='registerForm'>
