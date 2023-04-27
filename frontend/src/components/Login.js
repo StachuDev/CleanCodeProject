@@ -3,14 +3,15 @@ import { Link } from 'react-router-dom';
 import Header from './Header';
 import '../style/register.css'
 
-function AddAccesTokenToStorage({ element }) {
-  // Set the access token in local storage
-  // localStorage.setItem('access_token', element);
-  return (
-    <>
-      <div style={{ color: 'red', height: '40px'}}>{element}</div>
-    </>
-  );
+// zwraca promise z tokenem
+async function userLogin(credentials) {
+    return fetch('http://127.0.0.1:8000/api/token/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(credentials)
+    });  
 }
 
 
@@ -20,19 +21,14 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-
-
-  async function handleLogin(e) {
-    e.preventDefault();
-    //setError(Validation(values));
-    try {
-      const response = await fetch('http://127.0.0.1:8000/api/token/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      });
+  // po wcisnieciu submita uruchamia userLogin i ustawia token
+  const handleSubmit = async event => {
+    event.preventDefault();
+    const response = await userLogin({
+      email, 
+      password
+    });
+    if(response.ok){
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message || 'DING DONG SOMETHING IS WRONG!!!!!!!!!!!!!!!!!!!!!!');
@@ -50,29 +46,28 @@ function Login() {
       {/* <Header /> */}
       <AddAccesTokenToStorage element={accessToken} />
       <div className='register'>
-        <form onSubmit={handleLogin}>
-          <label htmlFor="email" id='login' className='registerForm'>
-            <input type="text" name="login" className='registerForm' placeholder='email' onChange={(e) => setEmail(e.target.value)} />
+        <form onSubmit={handleSubmit}>
+          <label htmlFor= "email" id='login' className='registerForm'>
+            <input type="text" name="login" className='registerForm' placeholder='email' onChange={(e) => setEmail(e.target.value)} required/>
           </label><br></br>
 
           <label htmlFor="password" id='password' className='registerForm'>
-            <input type="password" name="password" className='registerForm' placeholder='password' onChange={(e) => setPassword(e.target.value)} />
+            <input type="password" name="password" className='registerForm' placeholder='password' onChange={(e) => setPassword(e.target.value)} required/>
           </label>
           <br></br>
 
           <div className="recoverPassword">
-            <Link to="/password">Forgot your password?</Link>
-          </div>
+            {/* <Link to="/password">Forgot your password?</Link> */}
+            </div>
 
           <button type="submit" className='registerForm'>Sign in</button>
 
           <Link to="/Register" className="signIn">Create an account</Link>
         </form>
-
+        
       </div>
     </div>
-
+    
   );
 };
 
-export default Login;
