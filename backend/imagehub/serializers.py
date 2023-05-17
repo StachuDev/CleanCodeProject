@@ -9,6 +9,8 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=True)
+    
     class Meta:
         model = Post
         fields = ('id', 'user_id','title', 'description', 'create_date', 'image', 'tags')
