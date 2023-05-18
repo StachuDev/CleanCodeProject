@@ -1,32 +1,69 @@
-import { FileUpload } from 'primereact/fileupload';
+import { useState } from 'react';
+import axios from 'axios';
 
 export default function UploadPost() {
-    const obj = {
-        "user_id": 1,
-        "title": "post_title",
-        "description": "ala ma kota",
-        "create_date": "2023-05-16",
-        "image": "http://localhost:8000/images/githubFlow2.jpeg",
-        "tags": [
-            1
-        ]
-    }
+    const [data, setData] = useState({
+        user_id: 1,
+        title: '',
+        description: '',
+        image: null,
+        tags: [1]
+    });
+
+    const handleChange = (e) => {
+        setData({
+            [e.target.id]: e.target.value
+        })
+    };
+
+    const handleImageChange = (e) => {
+        setData({
+            image: e.target.files[0]
+        })
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(data);
+        let form_data = new FormData();
+        form_data.append('user_id', 1);
+        form_data.append('create_date', '2023-05-16');
+        form_data.append('title', data.title);
+        form_data.append('description', data.content);
+        form_data.append('image', data.image, data.image.name);
+        form_data.append('tags', [1]);
+
+        let url = 'http://localhost:8000/api/posts/';
+        axios.post(url, form_data, {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        })
+            .then(res => {
+                console.log(res.data);
+            })
+            .catch(err => console.log(err))
+    };
+
     return (
-        <UploadContainer>
-            <FileUpload name="avatar"
-                url={`http://localhost:8000/api/image/`}
-                maxFileSize={1000000}
-                accept={"image/*"}
-                key={Date.now()}
-                // onUpload={onUpload}
-                // cancelLabel={t("kanbanChangeUserDataDialogCancel")}
-                // uploadLabel={t("kanbanChangeUserDataDialogUpload")}
-                // chooseLabel={t("kanbanChangeUserDataDialogChoose")}
-                // emptyTemplate={emptyTemplate(t)}
-                // invalidFileSizeMessageDetail={t("kanbanChangeUserDataDialogInvalidSizeMessageDetail")}
-                // invalidFileSizeMessageSummary={t("kanbanChangeUserDataDialogInvalidSizeMessage")}
-                mode={"advanced"}
-            />
-        </UploadContainer>
+        <div className="App">
+            <form onSubmit={handleSubmit}>
+                <p>
+                    <input type="text" placeholder='Title' id='title' value={data.title} onChange={handleChange} required />
+                </p>
+                <p>
+                    <input type="text" placeholder='Description' id='content' value={data.description} onChange={handleChange} required />
+
+                </p>
+                <p>
+                    <input type="file"
+                        id="image"
+                        accept="image/png, image/jpeg" onChange={handleImageChange} required />
+                </p>
+                <input type="submit" />
+            </form>
+        </div>
     );
 }
+
+
