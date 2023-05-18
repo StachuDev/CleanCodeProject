@@ -217,7 +217,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 import os
 
 # Actual directory user files go to
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'images')
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'files')
 
 # URL used to access the media
 MEDIA_URL = '/'

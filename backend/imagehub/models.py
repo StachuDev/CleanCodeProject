@@ -17,7 +17,7 @@ class Post(models.Model):
     user_id = models.ForeignKey(Account, on_delete=models.CASCADE)
     title = models.CharField(max_length=45)
     description = models.TextField()
-    create_date = models.DateField()
+    create_date = models.DateField(auto_now_add=True)
     image = models.ImageField(upload_to=upload_to, blank=True, null=True)
     tags = models.ManyToManyField(Tag)
 
