@@ -175,4 +175,10 @@ AUTH_USER_MODEL = 'users.Account'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+import os
+
+# Actual directory user files go to
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'files')
+
+# URL used to access the media
+MEDIA_URL = '/'
