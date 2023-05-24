@@ -195,7 +195,7 @@ a:link {
     width:450px;
     line-height: 2em;
     margin-left: 2;
-    float:left;
+    /* float:left; */
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
    
