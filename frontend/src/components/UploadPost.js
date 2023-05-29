@@ -1,5 +1,10 @@
 import { useState } from 'react';
 import axios from 'axios';
+import '../style/uploadPost.css';
+import HeaderSmall from './HeaderSmall';
+
+
+
 
 export default function UploadPost() {
     const [data, setData] = useState({
@@ -46,22 +51,32 @@ export default function UploadPost() {
     };
 
     return (
-        <div className="App">
-            <form onSubmit={handleSubmit}>
+        <div className="UploadPost">
+            <div className='logoSmall'>
+                            <HeaderSmall/>
+            </div>
+        
+            <div className='content'>
+        
+
+            <form onSubmit={handleSubmit} className='uploadForm'>
+                    <input type="text" placeholder='Title' id='title' className='uploadInput' value={data.title} onChange={handleChange} required />
+
                 <p>
-                    <input type="text" placeholder='Title' id='title' value={data.title} onChange={handleChange} required />
-                </p>
-                <p>
-                    <input type="text" placeholder='Description' id='content' value={data.description} onChange={handleChange} required />
+                    <textarea type="text" cols="40" rows="3" placeholder='Description' id='description' className='uploadInput' value={data.description} onChange={handleChange} required />
 
                 </p>
                 <p>
+                
                     <input type="file"
                         id="image"
-                        accept="image/png, image/jpeg" onChange={handleImageChange} required />
+                        accept="image/png, image/jpeg" className='uploadInput' onChange={handleImageChange} required />
+                        
                 </p>
-                <input type="submit" />
+                
+                <input type="submit" className='uploadSubmit' />
             </form>
+            </div>
         </div>
     );
 }
