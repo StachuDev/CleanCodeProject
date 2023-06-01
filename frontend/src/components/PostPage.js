@@ -4,6 +4,8 @@ import HeaderSmall from './HeaderSmall';
 import { Link } from 'react-router-dom';
 import '../style/post.css';
 import ImageList from './ImageList';
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 
 import Tag from './Tag';
 
@@ -47,20 +49,25 @@ const PostPage = () => {
                 </div>
                 <div className='content'>
                     <div className='photoSection'>
-                    <div className='title'>Zaba bieg\</div>
+                    <div className='title'><h2>Zaba biega</h2></div>
                     <div className='photos'>
                         <img src={require('../images/testowe/2.gif')}/>
                     </div>
                 
-                <div className='description'>Fajowe zdjecie tak sie smialem ze zafajdalem majtasy</div>
+                <div className='description'><div className='username'>GigaChad69: 30.05.2023 16:50</div>Fajowa zaba biegnie a potem jeszcze biegnie a na koniec</div>
                 <div className='opinions'>
-                    <div className='likes'>1566666</div>
-                    <div className='dislikes'>2312</div>
+                    <div className='likes'><div className='likeImg'><ThumbUpIcon sx={{fontSize:15}}/></div>1566666</div>
+                    <div className='dislikes'><div className='dislikeImg'><ThumbDownIcon sx={{fontSize:15}}/></div>2312</div>
                 </div>
 
-                
-                <div className='comment1'><div className='username'>Username: 30.05.2023 17:00</div><div className='com'>fajowa zabafajowa zabafajowa zabafajowa zabafajowa zabafajowa zaba</div></div>
-                <div className='comment1'><div className='username'>Username: 30.05.2023 17:00</div><div className='com'> ciekawe gdzie tak biegnie</div></div>
+                <div className='commentsSection'><div className='commentTitle'>Komentarze</div>
+                        <div className='comment1'><div className='username'>Grażynka13: 30.05.2023 17:00</div><div className='com'>Fajowe zdjecie tak sie smialam ze zafajdalam majtasy</div></div>
+                        <div className='comment1'><div className='username'>Wojtuś09: 30.05.2023 17:00</div><div className='com'> ciekawe gdzie tak biegnie</div></div>
+                        <div className='addComment'><div className='addcommentTitle'>Dodaj komentarz</div>
+                            <div><textarea name="Text" cols="50" rows="3" style={{ border: '1.5px solid #f7971d'}}></textarea></div>
+                            <button type='submit' className='commentSubmit'>Dodaj</button>
+                    </div>
+                    </div>
                 </div>
                 </div>
                 
