@@ -2,10 +2,19 @@ import pytest
 from imagehub.models import Tag, Post, Comment, Subcomment, PostLike
 from users.models import Account
 from rest_framework.test import APIClient
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 @pytest.fixture
-def api_client():
+def api_client(account):
+    client = APIClient()
+    refresh = RefreshToken.for_user(account)
+    client.credentials(HTTP_AUTHORIZATION='Bearer '+str(refresh.access_token))
+    return client
+
+
+@pytest.fixture
+def api_client_unauthorized():
     client = APIClient()
     return client
 
@@ -43,13 +52,67 @@ def like(post, account) -> PostLike:
     return PostLike.objects.create(type=1, user=account, post=post)
 
 
+
+
+# -- for views ---
+@pytest.fixture
+def tag_payload():
+    payload = {
+        "tag": "tag"
+    }
+    return payload
+
+
 @pytest.fixture
 def post_payload():
     payload = {
-        'title': 'Lewis Hamilton',
-        'user': 1,
-        'description': 'Desc...',
-        'tag': 1,
-        'image': ''
+        "title": "Lewis Hamilton",
+        "user": 5,
+        "description": "Desc...",
+        "tag": 1
     }
     return payload
+
+
+@pytest.fixture
+def post_payload_bad():
+    payload = {
+        "user": 1,
+        "description": "Desc...",
+        "tag": 1
+    }
+    return payload
+
+
+@pytest.fixture
+def comment_payload(post):
+    payload = {
+        "post": post.id,
+        "comment_text": "Lewis Hamilton"
+    }
+    return payload
+
+
+
+@pytest.fixture
+def create_post(account, tag):
+    payload = {
+        "id": 100,
+        "title": "Lewis Hamilton",
+        "user": account,
+        "description": "Desc...",
+        "tag": tag
+    }
+    record = Post.objects.create(**payload)
+    return record
+
+@pytest.fixture
+def create_comment(account, post):
+    payload = {
+        "id": 100,
+        "comment_text": "AAAAAAAAAAA",
+        "user": account,
+        "post": post
+    }
+    record = Comment.objects.create(**payload)
+    return record

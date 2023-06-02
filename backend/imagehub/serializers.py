@@ -41,6 +41,12 @@ class PostSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PostNoTagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+
 class FullPostSerializer(serializers.ModelSerializer):
     tag = serializers.SlugRelatedField(queryset=Tag.objects.all(), slug_field='tag')
     comments = PostCommentSerializer(many=True)

@@ -140,8 +140,10 @@ def edit_post(request, pk, format=None):
                 tag = Tag.objects.get(tag=request.data['tag'])
             except:
                 Tag.objects.create(tag=request.data['tag'])
-
-        serializer = PostSerializer(post, data=request.data, partial=True)
+        
+            serializer = PostSerializer(post, data=request.data, partial=True)
+        else:
+            serializer = PostNoTagSerializer(post, data=request.data, partial=True)
   
         if serializer.is_valid():
             serializer.save()
@@ -157,7 +159,9 @@ def edit_post(request, pk, format=None):
 # --- comment ---
 
 @api_view(['GET'])
-def comment_list(request, post):
+def comment_list(request):
+    post = request.data.get('post')
+    
     comment = Comment.objects.filter(post=post)
     serializer = CommentSerializer(comment, many=True)
     return Response(serializer.data)
@@ -165,13 +169,12 @@ def comment_list(request, post):
 
 @api_view(['POST'])    
 @permission_classes([IsAuthenticated])
-def add_comment(request, post):
+def add_comment(request):
     user = request.user.id
     data = request.data
 
     data = data.copy()
     data['user'] = user
-    data['post'] = int(post)
 
     serializer = CommentSerializer(data=data)
 
@@ -183,8 +186,9 @@ def add_comment(request, post):
 
 @api_view(['GET', 'PATCH', 'DELETE'])
 @permission_classes([IsAuthenticated])
-def comment_detail(request, post, pk, format=None):
+def comment_detail(request, pk, format=None):
     user = request.user.id
+    post = request.data.get('post')
 
     try:
         comment = Comment.objects.get(pk=pk, post=post, user=user)
@@ -212,21 +216,22 @@ def comment_detail(request, post, pk, format=None):
 # --- subcomment ---
 
 @api_view(['GET'])
-def subcomment_list(request, comment):
-    subcomment = Subcomment.objects.filter(parrent_comment=comment)
+def subcomment_list(request):
+    parrent_comment = request.data.get('comment')
+
+    subcomment = Subcomment.objects.filter(parrent_comment=parrent_comment)
     serializer = SubcommentSerializer(subcomment, many=True)
     return Response(serializer.data)
 
 
 @api_view(['POST'])    
 @permission_classes([IsAuthenticated])
-def add_subcomment(request, comment):
+def add_subcomment(request):
     user = request.user.id
     data = request.data
     
     data = data.copy()
     data['user'] = user
-    data['parrent_comment'] = int(comment)
 
     serializer = SubcommentSerializer(data=data)
 
@@ -238,11 +243,12 @@ def add_subcomment(request, comment):
 
 @api_view(['GET', 'PATCH', 'DELETE'])
 @permission_classes([IsAuthenticated])
-def subcomment_detail(request, comment, pk, format=None):
+def subcomment_detail(request, pk, format=None):
     user = request.user.id
+    parrent_comment = request.data.get('comment')
 
     try:
-        subcomment = Subcomment.objects.get(pk=pk, parrent_comment=comment, user=user)
+        subcomment = Subcomment.objects.get(pk=pk, parrent_comment=parrent_comment, user=user)
     except Subcomment.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
   
@@ -267,7 +273,9 @@ def subcomment_detail(request, comment, pk, format=None):
 # --- post likes
 
 @api_view(['GET'])
-def postlike_list(request, post):
+def postlike_list(request):
+    post = request.data.get('post')
+
     postlike = PostLike.objects.filter(post=post)
     serializer = PostLikeSerializer(postlike, many=True)
     return Response(serializer.data)
@@ -275,19 +283,20 @@ def postlike_list(request, post):
 
 @api_view(['POST'])    
 @permission_classes([IsAuthenticated])
-def add_postlike(request, post):
+def add_postlike(request):
     user = request.user.id
+    post = request.data.get('post')
     data = request.data
 
     try:
-        like = PostLike.objects.get(user=user, post=int(post))
+        like = PostLike.objects.get(user=user, post=post)
     except:
         like = None
 
     if like is not None:
         return Response(status=status.HTTP_208_ALREADY_REPORTED)
 
-    post_obj = Post.objects.get(id=int(post))
+    post_obj = Post.objects.get(id=post)
 
     
     data = data.copy()
@@ -299,9 +308,8 @@ def add_postlike(request, post):
     elif like_type == "0": 
         post_obj.dislike_count = post_obj.dislike_count + 1
         post_obj.save()
-    data['user'] = user
-    data['post'] = int(post)
 
+    data['user'] = user
 
     serializer = PostLikeSerializer(data=data)
 
@@ -313,8 +321,9 @@ def add_postlike(request, post):
 
 @api_view(['GET', 'PATCH', 'DELETE'])
 @permission_classes([IsAuthenticated])
-def postlike_detail(request, post, pk, format=None):
+def postlike_detail(request, pk, format=None):
     user = request.user.id
+    post = request.data.get('post')
 
     try:
         postlike = PostLike.objects.get(pk=pk, post=post, user=user)
